@@ -1,8 +1,16 @@
 aid: sundaysky
-name: Sundaysky
-description: 'Sundaysky is a company surfaced as a portfolio company of norwest-venture-partners and added
-  to the API Evangelist network as a stub for enrichment. Sector: unknown. This profile is a lead awaiting
-  the enrichment pipeline.'
+name: SundaySky
+description: 'SundaySky is an enterprise video personalization platform that uses AI to
+  create, edit, and deliver dynamically personalized videos at scale. The platform lets
+  organizations tailor video content to individual viewers using customer data and real-time
+  rendering, serving customer experience, marketing, sales, and learning-and-development
+  teams — with particular traction in regulated industries such as financial services,
+  insurance, telecom, and healthcare. Its products include SundaySky Studio for content
+  creation, the SundaySky Player, a Landing Page Builder, and analytics and reporting.
+  The company operates a customer-facing help center and a public service status dashboard,
+  but does not publish an open, self-serve developer API program; platform access is
+  delivered to enterprise customers. This profile was surfaced as a portfolio company
+  of Norwest Venture Partners and enriched by the API Evangelist pipeline.'
 url: https://raw.githubusercontent.com/api-evangelist/sundaysky/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -10,12 +18,30 @@ x-backed-by:
 - norwest-venture-partners
 x-tier: stub
 x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: unknown
+  trial: false
+  try_now: false
+  public: false
+  label: Unknown
+  confidence: low
+  source: []
+  generated: '2026-07-22'
+  method: derived
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-21'
+image: https://sundaysky.com/favicon.ico
 tags:
 - Company
-- Unknown
+- Video
+- Personalization
+- Video Personalization
+- Marketing
+- Customer Experience
+- AI
+- Enterprise
 apis: []
 maintainers:
 - FN: Kin Lane
@@ -25,3 +51,28 @@ maintainers:
 common:
 - type: Website
   url: https://sundaysky.com
+- type: Documentation
+  url: https://help.sundaysky.com/hc/en-us
+- type: Support
+  url: https://help.sundaysky.com/hc/en-us
+- type: HelpCenter
+  url: https://help.sundaysky.com/hc/en-us
+- type: Blog
+  url: https://sundaysky.com/resources/?_resource_type=blog
+- type: StatusPage
+  url: https://sundaysky.com/service-dashboard/
+- type: GitHubOrganization
+  url: https://github.com/sundaysky
+- type: PrivacyPolicy
+  url: https://sundaysky.com/privacy-policy/
+- type: TermsOfService
+  url: https://sundaysky.com/terms-of-service/
+- type: DomainSecurity
+  url: security/sundaysky-domain-security.yml
+- type: Lifecycle
+  url: lifecycle/sundaysky-lifecycle.yml
+x-enrichment:
+  date: '2026-07-21'
+  status: minimal
+  artifacts_added: 2
+  pass: local-v1

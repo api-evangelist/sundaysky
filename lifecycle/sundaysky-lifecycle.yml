@@ -1,0 +1,24 @@
+generated: '2026-07-21'
+method: searched
+source: https://sundaysky.com/service-dashboard/
+status_page: https://sundaysky.com/service-dashboard/
+status_page_note: >-
+  Public service status dashboard listing operational state of SundaySky Studio,
+  video creation workflow, Publishing, Analytics, Reporting, the SundaySky Player,
+  Landing Page Builder, and User Management, with a past-incident history.
+components:
+- SundaySky Studio
+- Video creation workflow
+- Publishing
+- Analytics
+- Reporting
+- SundaySky Player
+- Landing Page Builder
+- User management
+versioning: null
+deprecation: null
+sla: null
+notes: >-
+  SundaySky publishes no open self-serve developer API program; no OpenAPI,
+  versioning policy, or deprecation/Sunset-header policy was found during the
+  enrichment pass. Only the public status dashboard is documented here.
