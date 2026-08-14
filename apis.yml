@@ -7,10 +7,15 @@ description: 'SundaySky is an enterprise video personalization platform that use
   teams — with particular traction in regulated industries such as financial services,
   insurance, telecom, and healthcare. Its products include SundaySky Studio for content
   creation, the SundaySky Player, a Landing Page Builder, and analytics and reporting.
-  The company operates a customer-facing help center and a public service status dashboard,
-  but does not publish an open, self-serve developer API program; platform access is
-  delivered to enterprise customers. This profile was surfaced as a portfolio company
-  of Norwest Venture Partners and enriched by the API Evangelist pipeline.'
+  SundaySky publishes one documented HTTP API — the SundaySky Video API, a storage-less
+  POST endpoint at apis.sundaysky.com that accepts a flat JSON payload of viewer
+  personalization fields and returns a base64 player session used to render a video in
+  real time — alongside a data-connector marketplace (Salesforce, HubSpot, Snowflake,
+  Databricks, Google Sheets, Marketo, file upload, URL parameters) and a client-side
+  player web component with a documented browser event surface. There is no self-serve
+  developer portal, no published OpenAPI, and no public pricing; platform access is sold
+  and provisioned to enterprise customers. This profile was surfaced as a portfolio
+  company of Norwest Venture Partners and enriched by the API Evangelist pipeline.'
 url: https://raw.githubusercontent.com/api-evangelist/sundaysky/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
@@ -19,19 +24,20 @@ x-backed-by:
 x-tier: stub
 x-tier-reason: portfolio-lead
 accessModel:
-  pricing: unknown
-  onboarding: unknown
+  pricing: enterprise
+  onboarding: sales
   trial: false
   try_now: false
   public: false
-  label: Unknown
-  confidence: low
-  source: []
-  generated: '2026-07-22'
-  method: derived
+  label: Enterprise
+  confidence: medium
+  source:
+  - https://help.sundaysky.com/hc/en-us/articles/6000894076957-Using-the-SundaySky-API-to-Connect-Data
+  generated: '2026-08-13'
+  method: searched
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-21'
+modified: '2026-08-13'
 image: https://sundaysky.com/favicon.ico
 tags:
 - Company
@@ -42,7 +48,38 @@ tags:
 - Customer Experience
 - AI
 - Enterprise
-apis: []
+- Video Generation
+- Media
+- Analytics
+- Martech
+apis:
+- name: SundaySky Video API
+  description: 'Storage-less HTTP API for real-time personalized video rendering. The
+    caller POSTs a flat JSON object of viewer personalization fields (mapped in the
+    SundaySky Studio data library) to the player-session endpoint for a given SundaySky
+    Video ID; SundaySky renders a personalized video in real time and returns a base64
+    string that the SundaySky player consumes, or that can be decoded to extract the
+    video stream URL and captions URL for use in a third-party player. Personalization
+    data is purged after the video is generated.'
+  humanURL: https://help.sundaysky.com/hc/en-us/articles/6000894076957-Using-the-SundaySky-API-to-Connect-Data
+  baseURL: https://apis.sundaysky.com
+  tags:
+  - Video
+  - Personalization
+  - Video Generation
+  properties:
+  - type: Documentation
+    url: https://help.sundaysky.com/hc/en-us/articles/6000894076957-Using-the-SundaySky-API-to-Connect-Data
+  - type: APIReference
+    url: https://help.sundaysky.com/hc/en-us/articles/6000894076957-Using-the-SundaySky-API-to-Connect-Data
+  - type: Authentication
+    url: authentication/sundaysky-authentication.yml
+  - type: ErrorCatalog
+    url: errors/sundaysky-problem-types.yml
+  - type: Conventions
+    url: conventions/sundaysky-conventions.yml
+  - type: DataModel
+    url: data-model/sundaysky-data-model.yml
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
@@ -53,6 +90,10 @@ common:
   url: https://sundaysky.com
 - type: Documentation
   url: https://help.sundaysky.com/hc/en-us
+- type: APIReference
+  url: https://help.sundaysky.com/hc/en-us/articles/6000894076957-Using-the-SundaySky-API-to-Connect-Data
+- type: GettingStarted
+  url: https://help.sundaysky.com/hc/en-us/articles/18000152116509-Getting-Started-with-SundaySky
 - type: Support
   url: https://help.sundaysky.com/hc/en-us
 - type: HelpCenter
@@ -61,6 +102,12 @@ common:
   url: https://sundaysky.com/resources/?_resource_type=blog
 - type: StatusPage
   url: https://sundaysky.com/service-dashboard/
+- type: Roadmap
+  url: https://help.sundaysky.com/hc/en-us/articles/21123723976733-SundaySky-Product-Roadmap
+- type: ChangeLog
+  url: changelog/sundaysky-changelog.yml
+- type: Login
+  url: https://app.sundaysky.com/
 - type: GitHubOrganization
   url: https://github.com/sundaysky
 - type: PrivacyPolicy
@@ -69,10 +116,50 @@ common:
   url: https://sundaysky.com/terms-of-service/
 - type: DomainSecurity
   url: security/sundaysky-domain-security.yml
+- type: TrustCenter
+  url: security/sundaysky-trust-center.yml
 - type: Lifecycle
   url: lifecycle/sundaysky-lifecycle.yml
+- type: Authentication
+  url: authentication/sundaysky-authentication.yml
+- type: Conventions
+  url: conventions/sundaysky-conventions.yml
+- type: ErrorCatalog
+  url: errors/sundaysky-problem-types.yml
+- type: Conformance
+  url: conformance/sundaysky-conformance.yml
+- type: DataModel
+  url: data-model/sundaysky-data-model.yml
+- type: Components
+  url: components/sundaysky-components.yml
+- type: Packages
+  url: packages/sundaysky-packages.yml
+- type: Plans
+  url: plans/sundaysky-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/sundaysky-rate-limits.yml
+- type: LLMsTxt
+  url: llms/sundaysky-llms.txt
 x-enrichment:
-  date: '2026-07-21'
-  status: minimal
-  artifacts_added: 2
+  date: '2026-08-13'
+  status: enriched
+  artifacts_added: 14
   pass: local-v1
+x-coverage:
+  state: covered
+  reason: contract-found-in-docs
+  detail: >-
+    The 2026-07-21 pass concluded SundaySky publishes no API. It does: the
+    SundaySky Video API is fully specified in prose in the help center and is
+    live at https://apis.sundaysky.com/get-video/player-session/{videoId},
+    confirmed 2026-08-13 by an unauthenticated POST that reached application
+    logic. No OpenAPI is published, so spec-grounded artifacts (skills, arazzo,
+    overlays, agentic-access) remain out of reach.
+  evidence:
+  - url: https://help.sundaysky.com/hc/en-us/articles/6000894076957-Using-the-SundaySky-API-to-Connect-Data
+    status: 200
+  - url: https://apis.sundaysky.com/get-video/player-session/00000000
+    status: 500
+  - url: https://trust.sundaysky.com/
+    status: 200
+  checked: '2026-08-13'
