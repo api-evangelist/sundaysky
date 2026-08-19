@@ -1,0 +1,96 @@
+generated: '2026-08-13'
+method: searched
+source: https://help.sundaysky.com/hc/en-us/sections/33188713095325
+docs: https://help.sundaysky.com/hc/en-us/sections/33188713095325
+
+scheme: dated-release-notes
+scheme_note: >-
+  SundaySky publishes monthly, dated product release notes grouped by year and
+  by product area. There is no semantic version, no API version, and no
+  breaking-change classification. Release notes describe platform and Studio
+  features; none of the entries in the captured window describe a change to the
+  SundaySky Video API contract.
+current_version: null
+cadence: monthly (not every month ships notes)
+
+archives:
+- year: 2026
+  url: https://help.sundaysky.com/hc/en-us/sections/33188713095325
+- year: 2025
+  url: https://help.sundaysky.com/hc/en-us/sections/24469674046749
+- year: 2024
+  url: https://help.sundaysky.com/hc/en-us/sections/15990650047389
+
+entries:
+- version: null
+  date: '2026-06-16'
+  title: Release Notes — June 2026
+  url: https://help.sundaysky.com/hc/en-us/articles/37409000569757-Release-Notes-June-2026
+  breaking: false
+  additions:
+  - area: Amplify Analytics
+    highlight: >-
+      Track video performance across templates and accounts in Amplify, to
+      compare engagement and identify top-performing content at scale.
+  - area: Video Creation
+    highlight: >-
+      Animation Cues — sync visuals to specific points in the narration by
+      placing cues in the script and binding text, media, or button
+      placeholders to enter, focus, or exit at that point.
+  - area: Collaboration
+    highlight: >-
+      Approval Workflow — admins define approval rules and editors route content
+      to designated approvers for signoff before publishing.
+  - area: Video Creation
+    highlight: >-
+      Script to Video — paste a narration script and AI produces a ready-to-edit
+      draft with scenes, layouts, visuals, on-screen text, music, and voice.
+- version: null
+  date: '2026-03-17'
+  title: Release Notes — March 2026
+  url: https://help.sundaysky.com/hc/en-us/articles/34701678138269-Release-Notes-March-2026
+  breaking: false
+  additions:
+  - area: Video Creation
+    highlight: >-
+      Import scenes between videos and templates in any direction, including
+      from archived videos.
+  - area: Media
+    highlight: >-
+      AI Media Generator — create custom images and video assets from a text
+      prompt; generated assets are saved to Your Media and reusable across videos.
+- version: null
+  date: '2026-02-03'
+  title: Release Notes — February 2026
+  url: https://help.sundaysky.com/hc/en-us/articles/33693968880669-Release-Notes-February-2026
+  breaking: false
+  additions:
+  - area: Media
+    highlight: >-
+      Edit images using the timeline in the Media Editor — combine multiple
+      images into one asset, animate images, and add shapes and text that appear
+      and disappear at specific points.
+  - area: Media
+    highlight: Revamped media editing toolbar with larger, titled buttons.
+- version: null
+  date: '2026-01-13'
+  title: Release Notes — January 2026
+  url: https://help.sundaysky.com/hc/en-us/articles/33188763401245-Release-Notes-January-2026
+  breaking: false
+  additions:
+  - area: Audio
+    highlight: >-
+      Translate a video's source language into up to three additional languages;
+      translation applies to narration and viewers choose their language, with a
+      single source version to maintain.
+  - area: Video Creation
+    highlight: >-
+      Create video drafts with AI from a written prompt or an uploaded document,
+      producing a suggested structure, scenes, narration, and media assets.
+
+api_change_history:
+  entries_affecting_api: 0
+  note: >-
+    No release note in the captured window (Jan–Jun 2026) records a change to
+    the SundaySky Video API request or response contract. The API article itself
+    was last updated 2026-02-18 per the help center's own metadata.

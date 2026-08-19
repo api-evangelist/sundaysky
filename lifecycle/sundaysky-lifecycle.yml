@@ -1,6 +1,6 @@
-generated: '2026-07-21'
+generated: '2026-08-13'
 method: searched
-source: https://sundaysky.com/service-dashboard/
+source: https://help.sundaysky.com/hc/en-us/articles/360019944758-SundaySky-Service-SLA
 status_page: https://sundaysky.com/service-dashboard/
 status_page_note: >-
   Public service status dashboard listing operational state of SundaySky Studio,
@@ -15,10 +15,89 @@ components:
 - SundaySky Player
 - Landing Page Builder
 - User management
-versioning: null
-deprecation: null
-sla: null
+
+versioning:
+  scheme: none
+  current: null
+  docs: null
+  note: >-
+    The SundaySky Video API endpoint carries no version path segment and no
+    version header is documented. Platform change is communicated through dated
+    monthly release notes rather than an API version. See
+    changelog/sundaysky-changelog.yml.
+
+deprecation:
+  policy_url: https://help.sundaysky.com/hc/en-us/articles/360017881098-SundaySky-Customer-Support-Policy
+  sunset_header: false
+  formal_api_policy: false
+  note: >-
+    SundaySky publishes no API deprecation policy and does not document RFC 8594
+    Sunset or Deprecation headers. What it does publish is a product-lifecycle
+    posture in the help center: a "Legacy Users" documentation category is
+    maintained for superseded platform generations, and a Customer Support
+    Policy sets out support commitments. Recorded honestly as a product
+    lifecycle signal, not an API deprecation contract.
+  legacy_documentation: https://help.sundaysky.com/hc/en-us/categories/4402963580561-Legacy-Users
+
+sla:
+  url: https://help.sundaysky.com/hc/en-us/articles/360019944758-SundaySky-Service-SLA
+  uptime_target: 99.8%
+  measurement_window: Service Year (preceding 12 full calendar months from the SLA claim date)
+  scope: Video Engine
+  sampling_interval: 5 minutes
+  unavailability_definition: >-
+    A state where all SundaySky video requests are not fulfilled — not generated
+    and not delivered from the Video Engine — during a five minute period, and
+    all users are unable to watch such videos due to a malfunction of the Video
+    Engine.
+  scheduled_maintenance:
+    recurring_window: Sunday 02:00 to Sunday 06:00 Eastern time, weekly
+    additional_notice: >-
+      Additional maintenance periods may be scheduled with at least two days
+      notice to the customer.
+    excluded_from_uptime: true
+  remedy:
+    type: service-credit
+    amount: >-
+      10% of the customer's monthly bill (excluding setup and other one-time
+      fees) for the month in which the most recent Service Unavailable event
+      included in the claim occurred.
+    claim_model: customer-initiated
+    claim_note: >-
+      A claim may be filed any time the trailing 12-month Annual Uptime
+      Percentage drops below 99.8%; the customer need not wait a full service
+      year. Downtime used in a successful claim cannot be reused in a future
+      claim. Credits apply to future payments only, are not refundable, and are
+      not transferrable or assignable. The credit is the customer's sole and
+      exclusive remedy.
+
+support:
+  policy_url: https://help.sundaysky.com/hc/en-us/articles/360017881098-SundaySky-Customer-Support-Policy
+  help_center: https://help.sundaysky.com/hc/en-us
+  channel_note: >-
+    Support requests are filed through the help center; an in-product AI chat
+    also accepts feature requests.
+
+roadmap:
+  url: https://help.sundaysky.com/hc/en-us/articles/21123723976733-SundaySky-Product-Roadmap
+  public: true
+  cadence: next few months, with scheduled release dates and Released/Planned status
+  feedback_channel: >-
+    In-product AI Chat "Feature Request" button, available once logged into any
+    SundaySky product.
+
+release_notes:
+  current_section: https://help.sundaysky.com/hc/en-us/sections/33188713095325
+  archive_sections:
+  - '2026: https://help.sundaysky.com/hc/en-us/sections/33188713095325'
+  - '2025: https://help.sundaysky.com/hc/en-us/sections/24469674046749'
+  - '2024: https://help.sundaysky.com/hc/en-us/sections/15990650047389'
+
+deprecated_operations: []
+
 notes: >-
-  SundaySky publishes no open self-serve developer API program; no OpenAPI,
-  versioning policy, or deprecation/Sunset-header policy was found during the
-  enrichment pass. Only the public status dashboard is documented here.
+  Upgraded 2026-08-13 from the 2026-07-21 pass, which recorded only the status
+  page and concluded SundaySky publishes no API. A documented HTTP API was found
+  in the help center on this pass (see apis[] in apis.yml). The SLA, roadmap,
+  support policy and release-note archive were all read from the provider's own
+  help center via its open Zendesk Help Center API.

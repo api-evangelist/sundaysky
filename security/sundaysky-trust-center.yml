@@ -1,0 +1,87 @@
+generated: '2026-08-13'
+method: probed
+probe: true
+url: https://trust.sundaysky.com/
+http_status: 200
+fetched: '2026-08-13'
+
+platform: Scytale
+platform_evidence: >-
+  The trust center is a client-rendered React application whose bundle declares
+  API_URL "https://api.scytale.ai", TRUST_CENTER_DOMAIN "trustcenter.scytale.ai",
+  version 1.0.69, and carries the string "trust-center.powered-by-scytale".
+  Read from https://trust.sundaysky.com/main.8f323eb1d028c9a65ab0.js on
+  2026-08-13.
+
+sections_advertised:
+- Compliance
+- Controls
+- Policies
+- Reports and Documents
+- FAQ
+
+access_model: request-access
+access_note: >-
+  The trust center presents a request-access dialog collecting full name, email
+  and company name. The bundle distinguishes public from restricted files
+  ("trust-center.file.public" / "trust-center.file.restricted"), so some
+  documents may be public to a browser session — but no certification name,
+  control, or document title is present in any anonymously reachable response.
+
+certifications: []
+certifications_note: >-
+  NONE VERIFIED. The section labels above are UI strings from the application
+  bundle, not SundaySky's actual compliance content. The content itself is
+  fetched at runtime from api.scytale.ai and was not retrievable anonymously:
+  the tenant-resolution call could not be reproduced without the application's
+  own request context. Recording a certification here without seeing it served
+  would be fabrication, so the list is deliberately empty.
+  CONSEQUENCE: no `Compliance` pointer is emitted in apis.yml. The
+  `compliance_published` check should score zero for this provider until a named
+  certification is verified. A `TrustCenter` pointer IS emitted, because the
+  trust center's existence is directly verified.
+
+corroborating_evidence:
+  help_center_certification_sweep:
+    corpus: 233 help center articles
+    fetched: '2026-08-13'
+    pattern: SOC 2, SOC 1, ISO 27001, PCI DSS, HIPAA, FedRAMP, GDPR, CCPA, CSA STAR, FIPS 140
+    named_certifications_found: 0
+    note: >-
+      The only matches across the entire corpus were WCAG (accessibility) and a
+      single incidental HIPAA mention inside the Third Party Terms article. No
+      SOC 2 or ISO 27001 claim appears anywhere in SundaySky's public
+      documentation, which is consistent with the certification detail living
+      behind the trust center's access gate.
+
+evidence:
+- source: https://trust.sundaysky.com/
+  http_status: 200
+  kind: trust-center
+  finding: >-
+    Live trust center at the conventional trust.<domain> subdomain, titled
+    "Trust Center", serving a 545-byte shell plus three JS bundles.
+- source: https://trust.sundaysky.com/main.8f323eb1d028c9a65ab0.js
+  http_status: 200
+  kind: bundle
+  finding: Scytale platform identification and section taxonomy.
+- source: https://sundaysky.com/security/
+  http_status: 200
+  kind: false-positive
+  finding: >-
+    NOT a security page. This path 302s to
+    https://sundaysky.com/wp-content/uploads/2024/08/Security.png and returns a
+    101KB PNG image with content-type image/png. A status-code-only probe would
+    wrongly record a security page here.
+
+related:
+  domain_security: security/sundaysky-domain-security.yml
+  conformance: conformance/sundaysky-conformance.yml
+  vulnerability_disclosure:
+    published: false
+    note: >-
+      No vulnerability disclosure program found. probe-security-programs.py
+      returned vdp=none on 2026-08-13. No security.txt is served on any host, no
+      security@ address is published in the help center, and no HackerOne,
+      Bugcrowd, or Intigriti program was found. No Security or
+      VulnerabilityDisclosure pointer is emitted.

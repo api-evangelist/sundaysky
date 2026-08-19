@@ -1,0 +1,143 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  SundaySky help center (233 articles read via the open Zendesk Help Center API)
+  plus live probes of apis.sundaysky.com and sundaysky.com, 2026-08-13.
+
+standards:
+- id: saml2
+  conforms: true
+  evidence: >-
+    "SundaySky supports identity providers that use the SAML 2.0 protocol for
+    authentication." SundaySky acts as Service Provider and publishes SP
+    metadata (entity ID, public certificate, login/redirect URL) as an XML
+    metadata file; it consumes IdP SSO URL + X.509 certificate or an IdP
+    metadata endpoint.
+  docs: https://help.sundaysky.com/hc/en-us/articles/27307608733981-Enabling-Single-Sign-On-SSO-for-Your-SundaySky-Account
+
+- id: oauth2
+  conforms: false
+  evidence: >-
+    Explicitly disclaimed by the provider — "OAuth is not currently supported."
+  docs: https://help.sundaysky.com/hc/en-us/articles/27307608733981-Enabling-Single-Sign-On-SSO-for-Your-SundaySky-Account
+
+- id: oidc
+  conforms: false
+  evidence: >-
+    No OIDC discovery document served. /.well-known/openid-configuration is 404
+    on sundaysky.com and 403 on apis.sundaysky.com; the 200 on app./studio. is
+    an SPA catch-all HTML shell, not a document.
+
+- id: scim2
+  conforms: false
+  evidence: >-
+    No provisioning API. SSO is documented as authentication only — "It does not
+    provision users. All users must be manually created in the SundaySky
+    platform by an Account owner."
+
+- id: openapi
+  conforms: false
+  evidence: >-
+    No OpenAPI or Swagger document published. Probed /openapi.json,
+    /openapi.yaml, /swagger.json, /v1/openapi.json and /api-docs against
+    sundaysky.com, api.sundaysky.com, apis.sundaysky.com, help., app., studio.,
+    docs. and developer. — all 404, 403, or SPA HTML shell. The one documented
+    operation is specified in prose in a help-center article.
+
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: >-
+    Errors return a bare {"error": "<string>"} object as application/json. No
+    type/title/status/detail/instance members and no application/problem+json
+    media type. See errors/sundaysky-problem-types.yml.
+
+- id: rfc9116-security-txt
+  conforms: false
+  evidence: >-
+    No security.txt served. 404 on sundaysky.com; 403 on apis.sundaysky.com; the
+    200 on app./studio. is the SPA HTML shell. See
+    well-known/sundaysky-well-known.yml.
+
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset or Deprecation header support documented; no API deprecation policy published.
+
+- id: rfc8615-well-known
+  conforms: false
+  evidence: >-
+    No /.well-known/ document is served on any SundaySky host. See
+    well-known/sundaysky-well-known.yml.
+
+- id: a2a-agent-card
+  conforms: false
+  evidence: >-
+    Probed /.well-known/agent-card.json and /.well-known/agent.json on all eight
+    candidate hosts. No JSON AgentCard returned; app. and studio. answer 200 with
+    an identical 28,561-byte HTML SPA shell for every path, which is not a card.
+
+- id: mcp
+  conforms: false
+  evidence: No MCP server published or discoverable. See mcp/sundaysky-mcp.yml.
+
+- id: asyncapi
+  conforms: false
+  evidence: >-
+    No AsyncAPI document and no server-delivered webhook surface. The player's
+    browser CustomEvents are client-side only. Not penalized — SundaySky has no
+    server-push event surface to describe.
+
+- id: wcag
+  conforms: partial
+  evidence: >-
+    SundaySky publishes an accessibility statement covering the player and
+    references WCAG in its accessibility article and in 2024 release notes
+    (April and June 2024) describing player accessibility work. No conformance
+    level, VPAT, or audit date is published, so this is recorded as a stated
+    commitment rather than a verified conformance claim.
+  docs: https://help.sundaysky.com/hc/en-us/articles/9186841123357-SundaySky-and-Accessibility
+
+- id: csp
+  conforms: true
+  evidence: >-
+    SundaySky publishes the exact Content-Security-Policy directive set required
+    to embed its player, covering default-src, worker-src, child-src,
+    connect-src, img-src, font-src, media-src, script-src, style-src and
+    frame-src. Uncommon and genuinely useful integrator documentation.
+  docs: https://help.sundaysky.com/hc/en-us/articles/27302852000541-Content-Security-Policies-Required-for-the-SundaySky-Player
+
+- id: hsts
+  conforms: partial
+  evidence: >-
+    Probed 2026-08-13 — sundaysky.com sends HSTS with max-age 63072000 and
+    help.sundaysky.com with max-age 31536000, but the API host
+    apis.sundaysky.com sends no HSTS header. See
+    security/sundaysky-domain-security.yml.
+
+- id: dmarc
+  conforms: true
+  evidence: DMARC published with policy reject; SPF present. Probed 2026-08-13.
+
+- id: dnssec
+  conforms: false
+  evidence: DNSSEC not enabled on sundaysky.com; no CAA records. Probed 2026-08-13.
+
+compliance_program:
+  published: false
+  trust_center: https://trust.sundaysky.com/
+  note: >-
+    A Scytale-powered Trust Center is live at trust.sundaysky.com and exposes
+    Compliance, Controls, Policies, and Reports & Documents sections — but the
+    document set sits behind a request-access gate and no certification name is
+    rendered in any anonymously reachable response. Because no named
+    certification (SOC 2, ISO 27001, PCI DSS, HIPAA, FedRAMP) could be verified,
+    NO Compliance pointer is emitted in apis.yml. A TrustCenter pointer is
+    emitted, because the trust center itself is verified present. See
+    security/sundaysky-trust-center.yml.
+  certifications_verified: []
+  privacy_documents:
+  - name: SundaySky Sub-Processors
+    url: https://help.sundaysky.com/hc/en-us/articles/22287355298077-SundaySky-Sub-Processors
+  - name: SundaySky In-Product Cookie Policy
+    url: https://help.sundaysky.com/hc/en-us/articles/12636993341725-SundaySky-In-Product-Cookie-Policy
+  - name: SundaySky Third Party Terms
+    url: https://help.sundaysky.com/hc/en-us/articles/25401938228637-SundaySky-Third-Party-Terms

@@ -1,0 +1,90 @@
+generated: '2026-08-13'
+method: derived
+status: candidate
+source: https://help.sundaysky.com/hc/en-us/articles/6000894076957-Using-the-SundaySky-API-to-Connect-Data
+
+deployment:
+  mode: none
+  endpoint: null
+  install: null
+  package: null
+  auth: none
+  verified: searched
+
+pointer_emitted: false
+pointer_note: >-
+  NO MCPServer pointer is emitted in apis.yml. SundaySky ships no MCP server —
+  this file records a derived candidate only. Emitting the canonical pointer
+  would credit the provider with an agent surface it does not operate, which is
+  worth 4 ergonomics points plus 12 agent-readiness points it has not earned.
+  Same discipline as the well-known and agent-card probes in this repo: the
+  pointer asserts the PROVIDER serves the surface.
+
+search_evidence:
+- surface: npm registry
+  query: https://registry.npmjs.org/-/v1/search?text=sundaysky
+  result: 0 packages — no @sundaysky/mcp or equivalent
+  fetched: '2026-08-13'
+- surface: GitHub organization
+  query: https://api.github.com/orgs/SundaySky/repos
+  result: 10 repositories, none MCP-related; most last updated 2019-2020
+  fetched: '2026-08-13'
+- surface: help center
+  query: 233 articles, full-text
+  result: no mention of MCP, Model Context Protocol, or an agent/tool server
+  fetched: '2026-08-13'
+- surface: live probe
+  query: https://apis.sundaysky.com/ and /mcp
+  result: 403 ForbiddenException (unrouted path on AWS API Gateway)
+  fetched: '2026-08-13'
+- surface: llms.txt
+  query: /llms.txt on sundaysky.com, help., app., studio., apis.
+  result: 404, 403, or SPA HTML shell — no published tool list
+  fetched: '2026-08-13'
+
+server: null
+
+tools:
+- name: create_personalized_video_session
+  status: candidate
+  description: >-
+    Render a personalized video for one viewer and return the base64 player
+    session, from which the video stream URL and captions URL can be decoded.
+  source_operation: >-
+    POST https://apis.sundaysky.com/get-video/player-session/{sundayskyVideoId}
+  input_schema_note: >-
+    Not fully specifiable. The request body is a FLAT JSON object whose keys are
+    defined per-video by the customer in the Studio's Map Fields window — there
+    is no global schema, and the valid key set differs for every SundaySky Video
+    ID. A conformant MCP inputSchema would need
+    {sundayskyVideoId: string} plus an open additionalProperties map, with the
+    concrete field names resolved per video at configuration time. This is the
+    core reason SundaySky's API does not lend itself to a generic tool
+    definition.
+  candidate_input_schema:
+    type: object
+    required:
+    - sundayskyVideoId
+    - personalization
+    properties:
+      sundayskyVideoId:
+        type: string
+        description: The SundaySky Video ID, found in the video's embed code snippet.
+      personalization:
+        type: object
+        description: >-
+          Flat map of JSON field name to value, matching the field mapping
+          configured for this video. Case-sensitive.
+        additionalProperties: true
+      id:
+        type: string
+        description: >-
+          Optional lowercase viewer identifier enabling per-viewer attribution
+          in SundaySky reports.
+
+crosswalk_emitted: false
+crosswalk_note: >-
+  No mcp/sundaysky-tool-crosswalk.yml is written. The crosswalk binds MCP tools
+  to backing OpenAPI operationIds; SundaySky publishes neither an MCP server nor
+  an OpenAPI, so both sides of the mapping are absent and any file would be
+  entirely notional.

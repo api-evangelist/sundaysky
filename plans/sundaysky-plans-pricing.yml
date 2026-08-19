@@ -1,0 +1,49 @@
+generated: '2026-08-13'
+method: searched
+source: https://sundaysky.com/
+docs: null
+
+plan_count: 0
+pricing_model: enterprise-contact-only
+currency: null
+
+note: >-
+  SundaySky publishes no pricing page and no plan tiers. Probed 2026-08-13:
+  https://sundaysky.com/pricing/ returns 404, /plans/ returns 404, and no
+  pricing URL appears anywhere in the site's sitemap index, which enumerates
+  post, page, team, customer, blog, event, webinar, tip-sheet, ebook, news,
+  industry and use-case sitemaps but no pricing surface. Commercial engagement
+  runs through https://sundaysky.com/contact/ and a named Success Manager. The
+  help center confirms the tiered-plan model exists without naming or pricing
+  the tiers: SSO is documented as "included or offered as an add-on" depending
+  on plan, and custom data integrations are described as a paid service quoted
+  per customer. This is a recorded absence, not an unchecked field.
+
+plans: []
+
+evidence:
+- url: https://sundaysky.com/pricing/
+  http_status: 404
+  fetched: '2026-08-13'
+- url: https://sundaysky.com/plans/
+  http_status: 404
+  fetched: '2026-08-13'
+- url: https://sundaysky.com/sitemap_index.xml
+  http_status: 200
+  fetched: '2026-08-13'
+  finding: no pricing or plans sitemap entry
+- url: https://sundaysky.com/contact/
+  http_status: 200
+  fetched: '2026-08-13'
+  finding: sales contact route in place of published pricing
+
+paid_addons_referenced:
+- name: Single Sign-On (SAML 2.0)
+  pricing: not published
+  source: https://help.sundaysky.com/hc/en-us/articles/27307608733981-Enabling-Single-Sign-On-SSO-for-Your-SundaySky-Account
+- name: Custom data integration
+  pricing: not published
+  description: >-
+    A paid service in which SundaySky builds and fully manages a bespoke data
+    integration on the customer's behalf.
+  source: https://help.sundaysky.com/hc/en-us/articles/7899534117277-Implementing-a-Custom-Data-Integration

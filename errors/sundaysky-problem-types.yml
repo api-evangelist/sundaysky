@@ -1,0 +1,89 @@
+generated: '2026-08-13'
+method: searched
+source: https://help.sundaysky.com/hc/en-us/articles/6000894076957-Using-the-SundaySky-API-to-Connect-Data
+format: vendor-json
+format_note: >-
+  Not RFC 9457. SundaySky returns a bare JSON object with a single `error`
+  string. There is no `type`, `title`, `status`, `detail`, or `instance` member,
+  and the content-type is application/json rather than application/problem+json.
+envelope:
+  media_type: application/json
+  fields:
+  - name: error
+    type: string
+    description: >-
+      Human-readable message. Observed to embed parameter diagnostics inline as
+      a comma-separated key/value tail rather than as structured members.
+  example: |-
+    {"error":"Internal server error. Not all mandatory params supplied - accountId: undefined,programId: 00000000, service: player-session, stage: prod"}
+
+problems:
+- status: 200
+  title: OK
+  description: >-
+    Video generation process was successful; a base64 response is returned. The
+    base64 payload decodes to the player session, from which the video stream
+    URL and captions file URL can be extracted.
+  source: docs
+- status: 30X
+  title: Temporary redirect
+  description: >-
+    Request was redirected (302, 307, and similar). The redirect target is in
+    the response `location` field. Clients calling the API server-side must
+    follow redirects to obtain the player session.
+  source: docs
+- status: 40X
+  title: Forbidden
+  description: >-
+    The request type is malformed or not supported. SundaySky documents this
+    class with the label "Forbidden" and gives 407 as an example, so the 4xx
+    family here signals a malformed or unsupported request shape rather than a
+    conventional authorization failure.
+  source: docs
+  note: >-
+    The docs' pairing of the 40X class with the word "Forbidden" and the example
+    407 is unusual and does not follow the normal HTTP semantics for those codes.
+    Recorded verbatim as published.
+- status: 500
+  title: Internal server error — missing mandatory params
+  description: >-
+    Returned when required parameters cannot be resolved from the request. The
+    message names the parameters the platform expected: accountId, programId,
+    service, stage. Observed on a live probe with a non-existent video ID, which
+    means an unknown or invalid SundaySky Video ID surfaces as a 500 rather than
+    a 404.
+  source: probed
+  evidence:
+    url: https://apis.sundaysky.com/get-video/player-session/00000000
+    method: POST
+    http_status: 500
+    fetched: '2026-08-13'
+  note: >-
+    This status is NOT in the provider's published response-code table. It was
+    observed live and is recorded here because an integrator will hit it. The
+    absence of a 404 for unknown video IDs is a real gap in the error contract.
+- status: 501
+  title: Not implemented
+  description: Technical exception. See response body for details.
+  source: docs
+
+client_side_errors:
+  description: >-
+    The SundaySky player web component emits a browser `error` event rather than
+    an HTTP status. See components/sundaysky-components.yml for the event surface.
+  event: error
+  fields:
+  - detail.errorCode
+  - detail.errorMessage
+  - detail.originalError
+  - detail.target
+  - detail.videoUrl
+  - detail.videoFormat
+  - detail.sessionId
+  docs: https://help.sundaysky.com/hc/en-us/articles/360009316897-Integrating-with-Player-Events
+
+gaps:
+- No machine-readable error registry or error-code list is published.
+- No RFC 9457 problem+json support.
+- No documented 404 for an unknown SundaySky Video ID; it returns 500.
+- No documented 429 or rate-limit exhaustion status. See rate-limits/sundaysky-rate-limits.yml.

@@ -1,0 +1,146 @@
+generated: '2026-08-13'
+method: probed
+source: live HTTP probes, 2026-08-13
+result: no-documents-found
+
+summary: >-
+  SundaySky serves no /.well-known/ document on any host. Eight candidate hosts
+  were probed against five well-known paths plus the OpenAPI discovery paths.
+  Every result is a 404, a 403, or an SPA catch-all. NO WellKnown, SecurityTxt,
+  or AgentCard pointer is emitted in apis.yml — this file records a verified
+  absence, and a pointer would assert a surface the provider does not serve.
+
+false_positive_warning: >-
+  app.sundaysky.com and studio.sundaysky.com answer HTTP 200 for EVERY path
+  probed, including paths that cannot exist. Every one of those responses is the
+  byte-identical 28,561-byte HTML single-page-app shell with content-type
+  text/html. These are catch-all routes, not documents. Treated as misses. Any
+  future pass that reads only the status code will wrongly credit this provider
+  with a well-known catalog, an agent card, an llms.txt, and an OpenAPI.
+
+hosts:
+- host: https://sundaysky.com
+  role: website
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /.well-known/openid-configuration
+    status: 404
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+  - path: /.well-known/api-catalog
+    status: 404
+  - path: /.well-known/ai-plugin.json
+    status: 404
+  - path: /.well-known/agent-card.json
+    status: 404
+  - path: /.well-known/agent.json
+    status: 404
+  - path: /llms.txt
+    status: 404
+
+- host: https://apis.sundaysky.com
+  role: api (documented base URL for the SundaySky Video API)
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+  - path: /.well-known/openid-configuration
+    status: 403
+  - path: /.well-known/oauth-authorization-server
+    status: 403
+  - path: /.well-known/api-catalog
+    status: 403
+  - path: /.well-known/ai-plugin.json
+    status: 403
+  - path: /.well-known/agent-card.json
+    status: 403
+  - path: /.well-known/agent.json
+    status: 403
+  - path: /openapi.json
+    status: 403
+  - path: /llms.txt
+    status: 403
+  note: >-
+    AWS API Gateway returns 403 ForbiddenException for any unrouted path, so
+    these 403s mean "no such route" rather than "gated document". Confirmed by
+    contrast: the documented route
+    POST /get-video/player-session/{id} returns 500 with an application error,
+    not 403.
+
+- host: https://api.sundaysky.com
+  role: candidate api host (NOT the documented base URL)
+  documents:
+  - path: /openapi.json
+    status: 403
+  - path: /.well-known/agent-card.json
+    status: 403
+  - path: /.well-known/security.txt
+    status: 403
+  note: >-
+    A separate live AWS API Gateway distribution answering 403 on all paths. The
+    provider's documentation names apis.sundaysky.com (plural), not this host.
+
+- host: https://app.sundaysky.com
+  role: platform login
+  spa_catch_all: true
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    document: false
+    content_type: text/html
+    reason: 28561-byte SPA shell, identical for every path
+  - path: /.well-known/agent-card.json
+    status: 200
+    document: false
+    content_type: text/html
+    reason: 28561-byte SPA shell, identical for every path
+  - path: /openapi.json
+    status: 200
+    document: false
+    content_type: text/html
+    reason: 28561-byte SPA shell, identical for every path
+  - path: /llms.txt
+    status: 200
+    document: false
+    content_type: text/html
+    reason: 28561-byte SPA shell, identical for every path
+
+- host: https://studio.sundaysky.com
+  role: platform studio
+  spa_catch_all: true
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    document: false
+    content_type: text/html
+    reason: 28561-byte SPA shell, identical for every path
+  - path: /.well-known/agent-card.json
+    status: 200
+    document: false
+    content_type: text/html
+    reason: 28561-byte SPA shell, identical for every path
+  - path: /openapi.json
+    status: 200
+    document: false
+    content_type: text/html
+    reason: 28561-byte SPA shell, identical for every path
+
+- host: https://help.sundaysky.com
+  role: documentation (Zendesk Help Center)
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+  - path: /llms.txt
+    status: 404
+  note: >-
+    Zendesk-hosted. Its Help Center REST API at /api/v2/help_center/ IS open and
+    anonymous, and is the surface from which this repo's documentation-derived
+    artifacts were read — but it is Zendesk's contract, not SundaySky's, so it
+    is not recorded as a SundaySky API.
+
+- host: https://docs.sundaysky.com
+  resolves: false
+- host: https://developer.sundaysky.com
+  resolves: false
+
+documents_found: 0

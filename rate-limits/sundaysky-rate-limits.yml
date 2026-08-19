@@ -1,0 +1,51 @@
+generated: '2026-08-13'
+method: searched
+source: https://help.sundaysky.com/hc/en-us/articles/6000894076957-Using-the-SundaySky-API-to-Connect-Data
+
+limit_count: 0
+headers_documented: false
+exhaustion_status: null
+
+note: >-
+  SundaySky documents no rate limits for the SundaySky Video API. The article
+  that fully specifies the endpoint publishes a response-code table covering
+  200, 30X, 40X and 501 and does not include 429 or any throttling status. No
+  X-RateLimit-*, RateLimit-*, or Retry-After header is documented anywhere in
+  the help center, and none was returned on a live unauthenticated POST to the
+  documented endpoint on 2026-08-13. An honest zero: checked across the full
+  233-article help center corpus and the live endpoint, nothing published.
+
+limits: []
+
+response_headers_observed:
+  fetched: '2026-08-13'
+  url: https://apis.sundaysky.com/get-video/player-session/00000000
+  method: POST
+  http_status: 500
+  rate_limit_headers: []
+  headers_present:
+  - content-type
+  - access-control-allow-origin
+  - access-control-allow-credentials
+  - x-amzn-requestid
+  - x-amz-apigw-id
+  - x-amzn-trace-id
+  - x-cache
+  - via
+  note: >-
+    The endpoint fronts AWS API Gateway behind CloudFront. AWS API Gateway
+    enforces account-level throttling by default and returns 429 with
+    x-amzn-ErrorType when tripped, so a limit almost certainly exists in
+    practice — but SundaySky publishes neither its value nor its signaling, so
+    no limit is recorded here. Infrastructure inference is not documentation.
+
+capacity_commitments:
+  note: >-
+    The nearest published capacity statement is availability, not throughput:
+    the Service SLA commits to 99.8% annual uptime of the Video Engine measured
+    in 5-minute intervals. See lifecycle/sundaysky-lifecycle.yml.
+
+gaps:
+- No published request limit, quota, or burst allowance.
+- No rate-limit response headers documented.
+- No documented status code or Retry-After behavior on exhaustion.

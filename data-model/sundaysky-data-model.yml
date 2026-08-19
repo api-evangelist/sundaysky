@@ -1,0 +1,254 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  SundaySky help center — Data Integration, Working with Data, and Managing &
+  Organizing Videos categories, read 2026-08-13.
+note: >-
+  Derived from the provider's own documentation rather than from an OpenAPI,
+  because SundaySky publishes no machine-readable spec. Entity names and field
+  names below appear verbatim in SundaySky's documentation or in observed API
+  responses; nothing is inferred from a spec that does not exist.
+
+entities:
+- name: Account
+  description: >-
+    Top-level tenant. Owns users, brands, data libraries, videos and analytics.
+    Users may belong to several accounts and switch between them.
+  identifiers:
+  - field: accountId
+    source: observed
+    evidence: >-
+      Named in the live error response from
+      POST https://apis.sundaysky.com/get-video/player-session/{id} on
+      2026-08-13. Also surfaces as the `analytics-token` player attribute and as
+      the subdomain in the templated player endpoint
+      https://{accountID}.web.sundaysky.com/create_video_session.
+
+- name: User
+  description: >-
+    A person with access to an account, assigned a user type that governs
+    permissions. Created manually by an Account owner; SSO authenticates but
+    does not provision.
+  roles:
+  - Account owner
+  - Editor
+  - Approver
+  - Viewer/reviewer
+  role_note: >-
+    The Approver role and its approval workflow shipped 2026-06-16; see
+    changelog/sundaysky-changelog.yml.
+
+- name: UserGroup
+  description: Grouping used to assign permissions across users.
+
+- name: Brand
+  description: >-
+    Reusable look-and-feel definition — colors, fonts, logo — applied across
+    videos in an account.
+
+- name: DataLibrary
+  description: >-
+    The personalization schema for one or more videos. Holds data fields, their
+    values, and exactly one attached data connector. Reusable across videos.
+  constraints:
+  - >-
+    A data library has exactly one data connector. Changing the connector on a
+    library that is already in use breaks existing videos that depend on it; the
+    documented remedy is to create a new library instead.
+
+- name: DataField
+  description: >-
+    A named personalization variable in a data library, used for on-screen text,
+    narration, message-by-audience selection, and show/skip-scene logic. Fields
+    used for audience messaging also carry an enumerated value set.
+
+- name: FieldMapping
+  description: >-
+    The binding between an inbound JSON key and a DataField, edited in the Map
+    Fields window. Case-sensitive on the JSON side. Renaming a data field does
+    not change an existing mapping.
+  fields:
+  - jsonFieldName
+  - dataField
+  - sourceField
+
+- name: DataConnector
+  description: >-
+    The transport that moves source data into the platform for personalization.
+    Selected per data library from the connector marketplace.
+  instances:
+  - name: SundaySky API
+    mode: push (real-time)
+    retention: storage-less — data purged after the video is generated
+  - name: File Upload
+    mode: manual CSV upload
+    retention: per SundaySky data retention policy
+  - name: Databricks
+    mode: pull (real-time, at play)
+    retention: never saved on SundaySky servers
+  - name: Snowflake
+    mode: pull (real-time, at play)
+  - name: Salesforce
+    mode: pull
+  - name: HubSpot
+    mode: pull
+  - name: Adobe Marketo Engage
+    mode: pull
+  - name: Google Sheets
+    mode: pull
+  - name: URL Parameters
+    mode: client-side, from the page URL
+  - name: Custom integration
+    mode: built and managed by SundaySky as a paid service
+
+- name: Video
+  aliases:
+  - Program
+  description: >-
+    The personalizable video definition — scenes, narration, media, text,
+    buttons — built in the Studio and approved on the Video Page before sharing.
+  identifiers:
+  - field: SundaySky Video ID
+    source: documented
+    evidence: >-
+      Path parameter of the Video API and present in the embed code snippet.
+  - field: programId
+    source: observed
+    evidence: >-
+      The live error response names `programId` and echoes the exact value
+      passed in the Video API path segment, showing that the documented
+      "SundaySky Video ID" is the platform's programId.
+  statuses:
+  - Draft
+  - Approved to share
+  - Archived
+
+- name: Template
+  description: >-
+    A reusable video blueprint. Scenes can be imported between videos and
+    templates in any direction, including from archived videos.
+
+- name: Scene
+  description: >-
+    An ordered segment of a video holding text, media, buttons, narration and
+    animation cues. Can be shown or skipped per audience segment.
+
+- name: CTA
+  description: >-
+    A call-to-action button rendered over the video. Fully described at runtime
+    in the player's ctaShow event payload.
+  fields:
+  - id
+  - label
+  - action
+  - actionRef
+  - default
+  - startTime
+  - endTime
+  - hotspot
+  - name
+  - url
+  - sceneName
+  - shouldHighlight
+  - type
+  - videoSegmentId
+
+- name: PlayerSession
+  description: >-
+    A single viewer's personalized render. Created by the Video API from a video
+    ID plus a viewer payload, and returned base64-encoded. Decodes to the video
+    stream URL and captions file URL.
+  identifiers:
+  - field: sessionId
+    source: documented
+    evidence: Emitted on nearly every player browser event as detail.sessionId.
+  - field: id
+    source: documented
+    evidence: >-
+      Optional lowercase viewer identifier in the request body; when supplied,
+      individual viewer behavior is attributable in SundaySky reports.
+  service_parameters:
+  - field: service
+    observed_value: player-session
+  - field: stage
+    observed_value: prod
+
+- name: LandingPage
+  description: >-
+    SundaySky-hosted page that presents the personalized video. Mutually
+    exclusive with the SundaySky API data connector.
+
+- name: MediaAsset
+  description: >-
+    Image, video, or audio in the Media Library, including AI-generated assets.
+
+- name: Report
+  description: >-
+    Analytics over viewer engagement, scheduled for delivery and filterable by
+    dashboard. Amplify analytics aggregate across templates and accounts.
+
+relationships:
+- from: Account
+  to: User
+  type: has_many
+- from: Account
+  to: DataLibrary
+  type: has_many
+- from: Account
+  to: Video
+  type: has_many
+- from: Account
+  to: Brand
+  type: has_many
+- from: User
+  to: UserGroup
+  type: has_many
+- from: DataLibrary
+  to: DataField
+  type: has_many
+- from: DataLibrary
+  to: DataConnector
+  type: has_one
+  via: connector selection
+- from: DataField
+  to: FieldMapping
+  type: has_one
+  via: dataField
+- from: Video
+  to: DataLibrary
+  type: belongs_to
+  via: data library selection
+- from: Video
+  to: Scene
+  type: has_many
+- from: Video
+  to: Template
+  type: belongs_to
+  via: saved-as/created-from template
+- from: Scene
+  to: CTA
+  type: has_many
+- from: Scene
+  to: MediaAsset
+  type: has_many
+- from: Video
+  to: PlayerSession
+  type: has_many
+  via: SundaySky Video ID (programId)
+- from: PlayerSession
+  to: Account
+  type: belongs_to
+  via: accountId
+- from: Video
+  to: LandingPage
+  type: has_one
+- from: Video
+  to: Report
+  type: has_many
+
+id_prefixes: []
+id_prefix_note: >-
+  SundaySky publishes no object-reference page and no id-prefix scheme. The
+  observed identifiers are opaque numeric strings.
+
+render: null

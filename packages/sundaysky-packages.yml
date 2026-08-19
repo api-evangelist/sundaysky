@@ -1,0 +1,66 @@
+generated: '2026-08-13'
+method: searched
+source: >-
+  npm registry search, PyPI, and the SundaySky GitHub organization, cross-read
+  against the provider's own embed/player documentation.
+
+summary:
+  official_sdk_count: 0
+  official_client_library_count: 1
+  registry_published_count: 0
+  note: >-
+    SundaySky publishes no server-side SDK in any package registry. Its one
+    first-party client library — the player web component — is distributed only
+    from its own CDN at an unversioned URL. No SDKs pointer is emitted in
+    apis.yml, because there is no registry-published client library for the
+    sdk_count checks to count and asserting one would be false credit.
+
+packages:
+- language: javascript
+  registry: cdn
+  name: sundaysky-player
+  distribution: https://play.sundaysky.com/main/sundaysky-player.grey.en-us.min.js
+  url: https://help.sundaysky.com/hc/en-us/articles/4897270366365-Embedding-the-SundaySky-Player-in-a-Webpage
+  install: >-
+    <script> tag referencing the CDN URL; the Embed Code Builder in the
+    SundaySky platform generates the snippet.
+  official: true
+  version: null
+  published: null
+  version_note: >-
+    Checked, nothing to record. The distribution is UNPINNED: the URL contains
+    the floating path segment "main" and no version identifier, and there is no
+    registry metadata endpoint to query because the bundle is CDN-distributed
+    rather than registry-published. A consumer cannot determine which build they
+    are loading, and neither can this pipeline. Verified live 2026-08-13 —
+    HTTP 200, application/javascript, 1,895,942 bytes.
+  provides:
+  - sundaysky-video custom element
+  - sundaysky-survey custom element
+  - browser event surface (see components/sundaysky-components.yml)
+
+registries_checked:
+- registry: npm
+  query: https://registry.npmjs.org/-/v1/search?text=sundaysky
+  result: 0 packages
+  fetched: '2026-08-13'
+- registry: pypi
+  query: https://pypi.org/pypi/sundaysky/json
+  result: 404
+  fetched: '2026-08-13'
+- registry: github
+  query: https://api.github.com/orgs/SundaySky/repos
+  result: >-
+    10 public repositories, none a SundaySky API client. The org holds forks of
+    third-party projects (lottie-web, bodymovin-extension, node-s3-client,
+    sagemaker-rl-container, schemats, gettyimages-api_nodejs), internal training
+    material (web-development-workshop, jenkins-lecture), one internal tool
+    (cost-anomaly-detector), and one archived placeholder. Most recent activity
+    2025-01-22; the majority were last updated 2019–2020.
+  fetched: '2026-08-13'
+
+gaps:
+- No first-party server-side SDK in any language.
+- The one first-party client library is unversioned and unpinnable.
+- No package-registry presence at all, so there is no dated release signal to
+  read decay from.

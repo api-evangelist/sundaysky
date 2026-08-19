@@ -1,0 +1,219 @@
+generated: '2026-08-13'
+method: searched
+source: https://help.sundaysky.com/hc/en-us/articles/360009316897-Integrating-with-Player-Events
+docs:
+- https://help.sundaysky.com/hc/en-us/articles/4897270366365-Embedding-the-SundaySky-Player-in-a-Webpage
+- https://help.sundaysky.com/hc/en-us/articles/360009316897-Integrating-with-Player-Events
+
+summary: >-
+  SundaySky's developer-facing surface is predominantly client-side. The
+  SundaySky Player is distributed as a custom-element web component loaded from
+  a CDN, configured by HTML attributes, and observed through browser
+  CustomEvents. This is the richest and most precisely documented part of
+  SundaySky's integration story — considerably more detailed than its one HTTP
+  endpoint.
+
+loaders:
+- name: SundaySky Player
+  type: web-component-bundle
+  url: https://play.sundaysky.com/main/sundaysky-player.grey.en-us.min.js
+  registry: cdn
+  version: null
+  version_note: >-
+    The documented URL is pinned to the floating path segment "main" and carries
+    no version in the URL. The bundle is served without a resolvable version
+    identifier, so a consumer cannot tell which build they are loading. Verified
+    live 2026-08-13: HTTP 200, application/javascript, 1,895,942 bytes.
+  variant_note: >-
+    The path encodes a theme ("grey") and a locale ("en-us"), implying sibling
+    builds exist per theme/locale. Only this combination appears in the
+    published docs.
+  http_status: 200
+  fetched: '2026-08-13'
+
+families:
+- name: Video Player
+  elements:
+  - tag: sundaysky-video
+    description: >-
+      The personalized video player custom element. Created via
+      document.createElement('sundaysky-video') and appended to a container, or
+      emitted by the Embed Code Builder.
+    attributes:
+    - name: id
+      description: >-
+        Element id used to retrieve the player for event binding. SundaySky's
+        own integration snippets use the value "sskyplayer".
+    - name: analytics-token
+      description: Account identifier used for engagement analytics attribution.
+    - name: endpoint-url
+      description: >-
+        Session-creation endpoint the player calls. Documented in templated
+        form as https://{accountID}.web.sundaysky.com/create_video_session —
+        a per-account host, distinct from the apis.sundaysky.com Video API.
+    - name: session-parameters
+      description: >-
+        JSON string of personalization parameters for the session, e.g.
+        '{ "id" : "110006" }'.
+    - name: poster
+      description: >-
+        Poster/thumbnail image URL. Recommended 1280x720, 16:9 aspect ratio.
+- name: Survey
+  elements:
+  - tag: sundaysky-survey
+    description: >-
+      Optional survey component that connects to the player. When present, the
+      player emits `survey` and `surveySubmit` events. Supports NPS and custom
+      surveys. Not available via the iframe embed method.
+
+embed_methods:
+- name: javascript
+  supports_api_connector: true
+  supports_surveys: true
+  supports_advanced_player_config: true
+  auto_update: false
+  note: >-
+    Required for the SundaySky API data connector, NPS/custom surveys, advanced
+    player configuration, and any event tracking. Code must be re-copied from
+    the Embed Code Builder after changes.
+- name: iframe
+  supports_api_connector: false
+  supports_surveys: false
+  supports_advanced_player_config: false
+  auto_update: true
+  note: >-
+    Short, CSS-isolated, auto-updating, and usable where JavaScript cannot run —
+    but detailed event information cannot be captured and the API data connector
+    is unsupported.
+
+event_surface:
+  binding: addEventListener on the player element
+  transport: browser CustomEvent (client-side only; not server-delivered webhooks)
+  common_detail_fields:
+  - detail.videoUrl
+  - detail.videoFormat
+  - detail.sessionId
+  events:
+  - name: load
+    trigger: All software components finished loading and the player component is initialized.
+  - name: playRequested
+    trigger: User clicks play for the first time. Not fired on autoplay videos.
+  - name: playStart
+    trigger: Video starts playing for the first time. Never fires more than once per session.
+  - name: progress
+    trigger: Every 1% of video duration while playing, including 0% and 100%.
+    extra_fields:
+    - detail.position
+  - name: scene
+    trigger: Video starts playing a new scene.
+    extra_fields:
+    - detail.position
+    - detail.scene
+  - name: ended
+    trigger: Video ends.
+  - name: error
+    trigger: Player encounters an error.
+    extra_fields:
+    - detail.errorCode
+    - detail.errorMessage
+    - detail.originalError
+    - detail.target
+  - name: ctaShow
+    trigger: A CTA button should be displayed.
+    extra_fields:
+    - detail.ids
+    - detail.ctaSpec
+    - detail.scene
+    cta_spec_fields:
+    - id
+    - label
+    - action
+    - actionRef
+    - default
+    - startTime
+    - endTime
+    - hotspot.width
+    - hotspot.height
+    - hotspot.x
+    - hotspot.y
+    - name
+    - url
+    - sceneName
+    - shouldHighlight
+    - type
+    - videoSegmentId
+    cta_types:
+    - URL
+    - video
+    - replay
+    - share
+    - javascript (legacy)
+    - url (legacy)
+  - name: ctaHide
+    trigger: A CTA menu should be hidden. Fired per CTA separately.
+  - name: ctaClicked
+    trigger: A CTA menu option was clicked.
+    extra_fields:
+    - detail.url
+    - detail.name
+    cancelable: true
+    cancel_note: >-
+      preventDefault() suppresses the default action of opening the URL in a new
+      browser tab, allowing a custom action instead.
+  - name: userAction
+    trigger: Any user interaction with a button or on-screen control.
+    extra_fields:
+    - detail.action
+    - detail.value
+    action_values:
+    - play
+    - pause
+    - volumeChange
+    - mute
+    - seek
+    - toggleCC
+    - toggleFullScreen
+    - toggleTranscript
+    - downloadTranscript
+  - name: transcript
+    trigger: Transcript data becomes available, typically when the video starts playing.
+    extra_fields:
+    - detail.transcript
+    - detail.descriptivetranscript
+  - name: transcriptClicked
+    trigger: A transcript control-bar button was clicked.
+    extra_fields:
+    - detail.url
+    cancelable: true
+  - name: survey
+    trigger: A connected sundaysky-survey component was presented for the first time.
+    extra_fields:
+    - detail.target
+  - name: surveySubmit
+    trigger: A connected sundaysky-survey component was submitted.
+    extra_fields:
+    - detail.target
+  - name: Time to First Frame
+    trigger: Video starts playing for the first time.
+    extra_fields:
+    - detail.value
+    note: Value is time to first frame in milliseconds. Event name published with spaces.
+  - name: Video Played
+    trigger: Video starts playing for the first time.
+    extra_fields:
+    - detail.value
+    note: Value is the video duration. Event name published with spaces.
+
+builders:
+- name: Embed Code Builder
+  description: >-
+    In-platform tool on the video's Share tab that generates the embed snippet
+    and configures poster image, player colors, control bar, and NPS settings
+    with a live preview. No coding required.
+
+note_on_webhooks: >-
+  These are browser-side DOM CustomEvents emitted by a web component in the
+  viewer's page. They are NOT server-delivered webhooks and no webhook
+  subscription, delivery, retry, or signing surface is documented. No Webhooks
+  or AsyncAPI pointer is emitted for this provider — doing so would assert a
+  server-push event surface that SundaySky does not publish.
